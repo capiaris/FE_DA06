@@ -1,16 +1,42 @@
-# React + Vite
+# Booking System Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React-based user interface for the Booking System, built with Vite and React Router.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React 18
+- Vite
+- React Router DOM
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Home Page**: Dashboard and navigation menu.
+- **Booking Form**: Create new appointments with specific time slot selection (:00 and :30).
+- **Schedule Board**: Real-time daily view of all bookings, including visual indicators for slot capacity (max 3 people per slot).
 
-## Expanding the ESLint configuration
+## Project Structure
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+    client/
+    ├── src/
+    │   ├── components/      # Shared UI components (e.g., Header)
+    │   ├── features/        # Feature-specific components (BookingForm, ScheduleBoard)
+    │   ├── layouts/         # Page layouts (MainLayout)
+    │   ├── pages/           # Route pages (HomePage, BookingPage, SchedulePage)
+    │   ├── services/        # API integration (api.js)
+    │   ├── utils/           # Constants and helpers
+    │   ├── App.jsx          # App routing configuration
+    │   └── main.jsx         # Application entry point
+    ├── package.json
+    └── vite.config.js
+
+## Setup & Installation
+
+1. Install dependencies:
+   npm install
+
+2. Start the development server:
+   npm run dev
+
+## Configuration
+
+By default, the frontend is configured to communicate with the backend API at `http://localhost:3000/api`. If your backend runs on a different port, update the `API_URL` constant in `src/services/api.js`.
