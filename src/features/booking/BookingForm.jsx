@@ -7,14 +7,16 @@ export const BookingForm = ({ onSuccess }) => {
     const [timePart, setTimePart] = useState(TIME_SLOTS[0]);
     const [formData, setFormData] = useState({ name: '', phoneNumber: '' });
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!datePart) {
-            setError("Please select a date");
+            setError("Vui lòng chọn ngày");
             return;
         }
 
+        setIsLoading(true);
         try {
             const [hours, minutes] = timePart.split(':');
             const localDate = new Date(datePart);
@@ -30,52 +32,93 @@ export const BookingForm = ({ onSuccess }) => {
             setError(null);
             setFormData({ name: '', phoneNumber: '' });
             if (onSuccess) onSuccess();
-            alert("Booking successful!");
+            alert("Đặt lịch thành công!");
             
         } catch (err) {
             setError(err.message);
+        } finally {
+            setIsLoading(false);
         }
     };
 
+    const inputStyle = {
+        width: '100%', padding: '10px 14px', marginTop: '6px',
+        border: '1px solid #d1d5db', borderRadius: '8px',
+        boxSizing: 'border-box', fontSize: '0.95rem',
+        outlineColor: '#3b82f6'
+    };
+
+    const labelStyle = {
+        display: 'block', fontSize: '0.9rem', fontWeight: '600', color: '#374151', marginTop: '16px'
+    };
+
     return (
-        <form onSubmit={handleSubmit} style={{ padding: '20px', border: '1px solid #ccc', marginBottom: '20px' }}>
-            <h2>Create Booking</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+        <form onSubmit={handleSubmit} style={{ 
+            backgroundColor: '#ffffff', borderRadius: '16px', 
+            boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)', 
+            padding: '32px', maxWidth: '450px', margin: '0 auto', border: '1px solid #f3f4f6'
+        }}>
+            <h2 style={{ margin: '0 0 24px 0', color: '#111827', fontSize: '1.5rem', fontWeight: '700', borderBottom: '1px solid #e5e7eb', paddingBottom: '16px' }}>
+                Đăng ký lịch hẹn
+            </h2>
+            
+            {error && (
+                <div style={{ backgroundColor: '#fee2e2', color: '#b91c1c', padding: '12px', borderRadius: '8px', marginBottom: '16px', fontSize: '0.9rem', border: '1px solid #f87171' }}>
+                    {error}
+                </div>
+            )}
             
             <div>
-                <label>Name: </label>
+                <label style={labelStyle}>Họ và Tên</label>
                 <input 
                     name="name" value={formData.name} required
                     onChange={e => setFormData({...formData, name: e.target.value})} 
+                    style={inputStyle} placeholder="Nhập họ và tên..."
                 />
             </div>
             
-            <div style={{ marginTop: '10px' }}>
-                <label>Phone: </label>
+            <div>
+                <label style={labelStyle}>Số điện thoại</label>
                 <input 
                     name="phoneNumber" value={formData.phoneNumber} required
                     onChange={e => setFormData({...formData, phoneNumber: e.target.value})} 
+                    style={inputStyle} placeholder="Nhập số điện thoại..."
                 />
             </div>
             
-            <div style={{ marginTop: '10px' }}>
-                <label>Date: </label>
-                <input 
-                    type="date" value={datePart} required
-                    onChange={e => setDatePart(e.target.value)} 
-                />
-            </div>
+            <div style={{ display: 'flex', gap: '16px' }}>
+                <div style={{ flex: '1' }}>
+                    <label style={labelStyle}>Ngày hẹn</label>
+                    <input 
+                        type="date" value={datePart} required
+                        onChange={e => setDatePart(e.target.value)} 
+                        style={inputStyle}
+                    />
+                </div>
 
-            <div style={{ marginTop: '10px' }}>
-                <label>Time: </label>
-                <select value={timePart} onChange={e => setTimePart(e.target.value)}>
-                    {TIME_SLOTS.map(slot => (
-                        <option key={slot} value={slot}>{slot}</option>
-                    ))}
-                </select>
+                <div style={{ width: '120px' }}>
+                    <label style={labelStyle}>Giờ</label>
+                    <select value={timePart} onChange={e => setTimePart(e.target.value)} style={inputStyle}>
+                        {TIME_SLOTS.map(slot => (
+                            <option key={slot} value={slot}>{slot}</option>
+                        ))}
+                    </select>
+                </div>
             </div>
             
-            <button type="submit" style={{ marginTop: '15px' }}>Submit</button>
+            <button 
+                type="submit" 
+                disabled={isLoading}
+                style={{ 
+                    width: '100%', marginTop: '32px', padding: '12px', 
+                    backgroundColor: isLoading ? '#93c5fd' : '#2563eb', 
+                    color: 'white', border: 'none', borderRadius: '8px', 
+                    fontSize: '1rem', fontWeight: '600', cursor: isLoading ? 'not-allowed' : 'pointer',
+                    transition: 'background-color 0.2s'
+                }}
+            >
+                {isLoading ? 'Đang xử lý...' : 'Xác nhận đặt lịch'}
+            </button>
         </form>
     );
 };
